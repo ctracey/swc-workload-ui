@@ -1,0 +1,60 @@
+{
+  "items": [
+    {
+      "id": "f173d94",
+      "title": "refresh every 2 seconds",
+      "status": "not-started",
+      "children": [],
+      "meta": {}
+    },
+    {
+      "id": "3754a0a",
+      "title": "update readme with path parameter usage",
+      "status": "not-started",
+      "children": [],
+      "meta": {}
+    },
+    {
+      "id": "69c2475",
+      "title": "show nested workitems",
+      "status": "not-started",
+      "children": [],
+      "meta": {}
+    },
+    {
+      "id": "9ebea4e",
+      "title": "add panel with tabs for workitem content",
+      "status": "not-started",
+      "children": [],
+      "meta": {}
+    },
+    {
+      "id": "b3f2910",
+      "title": "add panel with tabs for workload content (plan stuff)",
+      "status": "not-started",
+      "children": [],
+      "meta": {}
+    },
+    {
+      "id": "31ab230",
+      "title": "gracefully handle no path parameter",
+      "status": "not-started",
+      "children": [],
+      "meta": {}
+    },
+    {
+      "id": "df68712",
+      "title": "validate progress bar calculation and workflow definition (check swc provided json file)",
+      "status": "not-started",
+      "children": [],
+      "meta": {}
+    },
+    {
+      "id": "62281fc",
+      "title": "update workload progress tag & statuses",
+      "status": "not-started",
+      "children": [],
+      "meta": {}
+    }
+  ]
+}
