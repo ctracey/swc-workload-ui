@@ -3,7 +3,7 @@ import { mapStatus, itemProgress, itemStage } from '../workload.js'
 
 const TAG_CLASS = { blocked: 't-blocked', done: 't-done', pending: 't-pending', skipped: 't-pending' }
 
-export default function WorkItemCard({ item, selected, onSelect }) {
+export default function WorkItemCard({ item, number, selected, onSelect }) {
   const pct = itemProgress(item)
   const state = mapStatus(item.status)
   const stage = itemStage(item)
@@ -25,7 +25,9 @@ export default function WorkItemCard({ item, selected, onSelect }) {
       onKeyDown={pick}
     >
       <div className="top">
-        <span className="cid">{item.id}</span>
+        <span className="cid">
+          WI-{String(number).padStart(2, '0')} · {item.id}
+        </span>
         <span className="cpc">{pct}%</span>
       </div>
       <div className="mid">

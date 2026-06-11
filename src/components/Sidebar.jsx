@@ -12,10 +12,11 @@ export default function Sidebar({ items }) {
         <span className="cnt">{items.length}</span>
       </div>
       <div className="cardlist" role="listbox" aria-label="Workitems">
-        {items.map((item) => (
+        {items.map((item, i) => (
           <WorkItemCard
             key={item.id}
             item={item}
+            number={i + 1}
             selected={item.id === selectedId}
             onSelect={() => setSelectedId(item.id)}
           />
