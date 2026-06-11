@@ -290,6 +290,37 @@ body::before {
   border: 1px solid currentColor;
 }
 
+.card .subtoggle {
+  margin-top: 9px;
+  padding: 2px 0;
+  display: block;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: 'Space Mono', ui-monospace, monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  color: var(--mute);
+  transition: color 0.12s;
+}
+
+.card .subtoggle:hover {
+  color: var(--yellow);
+}
+
+.card .subtoggle:focus-visible {
+  outline: 1px solid var(--yellow);
+  outline-offset: 2px;
+}
+
+.card .children {
+  margin-top: 8px;
+  margin-left: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
 .strip {
   display: flex;
   gap: 2px;

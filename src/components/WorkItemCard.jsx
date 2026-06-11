@@ -1,24 +1,28 @@
+import { useState } from 'react'
 import ProgressBar from './ProgressBar.jsx'
 import { mapStatus, itemProgress, itemStage, progressStages } from '../workload.js'
 
 const TAG_CLASS = { blocked: 't-blocked', done: 't-done', pending: 't-pending', skipped: 't-pending' }
 
-export default function WorkItemCard({ item, number, depth = 0, selected, onSelect }) {
+export default function WorkItemCard({ item, number, selectedId, onSelect }) {
+  const [expanded, setExpanded] = useState(false)
   const pct = itemProgress(item)
   const state = mapStatus(item.status)
   const stage = itemStage(item)
   const stripStates = progressStages(item).map((s) => (s.state === 'queued' ? 'pending' : s.state))
+  const selected = item.id === selectedId
+  const childCount = item.children?.length ?? 0
 
   const pick = (e) => {
     if (e.type === 'keydown' && e.key !== 'Enter' && e.key !== ' ') return
     e.preventDefault()
-    onSelect?.(item)
+    e.stopPropagation()
+    onSelect?.(item.id)
   }
 
   return (
     <div
       className={'card' + (selected ? ' sel' : '')}
-      style={depth > 0 ? { marginLeft: depth * 18 } : undefined}
       role="option"
       aria-selected={selected}
       tabIndex={0}
@@ -38,6 +42,33 @@ export default function WorkItemCard({ item, number, depth = 0, selected, onSele
           <span>{stage ?? '—'}</span>
         </div>
         <ProgressBar states={stripStates} />
+        {childCount > 0 && (
+          <button
+            type="button"
+            className="subtoggle"
+            aria-expanded={expanded}
+            onClick={(e) => {
+              e.stopPropagation()
+              setExpanded(!expanded)
+            }}
+            onKeyDown={(e) => e.stopPropagation()}
+          >
+            {expanded ? '▾' : '▸'} {childCount} SUB
+          </button>
+        )}
+        {childCount > 0 && expanded && (
+          <div className="children">
+            {item.children.map((child, i) => (
+              <WorkItemCard
+                key={child.id}
+                item={child}
+                number={`${number}.${i + 1}`}
+                selectedId={selectedId}
+                onSelect={onSelect}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   )
