@@ -1,0 +1,140 @@
+{
+  "items": [
+    {
+      "id": "b6449d9",
+      "title": "Basic HTML scaffold",
+      "status": "in-progress",
+      "children": [
+        {
+          "id": "c4036f3",
+          "title": "index.html with page structure, title, and quote display area",
+          "status": "not-started",
+          "children": [],
+          "meta": {}
+        },
+        {
+          "id": "b4785b4",
+          "title": "Button element with placeholder label",
+          "status": "not-started",
+          "children": [],
+          "meta": {}
+        }
+      ],
+      "meta": {
+        "swc": {
+          "workflowState": {
+            "deliver": {
+              "currentStage": "review",
+              "completed": false
+            },
+            "implement": {
+              "currentStage": null,
+              "completed": true
+            }
+          },
+          "workflowEvents": [
+            {
+              "workflow": "deliver",
+              "stage": "requirements",
+              "timestamp": "2026-06-11T11:04:39Z"
+            },
+            {
+              "workflow": "deliver",
+              "stage": "specs",
+              "timestamp": "2026-06-11T11:17:28Z"
+            },
+            {
+              "workflow": "deliver",
+              "stage": "solution-design",
+              "timestamp": "2026-06-11T11:20:11Z"
+            },
+            {
+              "workflow": "deliver",
+              "stage": "solution-design",
+              "timestamp": "2026-06-11T11:23:57Z"
+            },
+            {
+              "workflow": "deliver",
+              "stage": "implement",
+              "timestamp": "2026-06-11T11:25:31Z"
+            },
+            {
+              "workflow": "implement",
+              "stage": "orient",
+              "timestamp": "2026-06-11T11:28:01Z"
+            },
+            {
+              "workflow": "implement",
+              "stage": "implement",
+              "timestamp": "2026-06-11T11:29:12Z"
+            },
+            {
+              "workflow": "implement",
+              "stage": "summarise",
+              "timestamp": "2026-06-11T11:30:15Z"
+            },
+            {
+              "workflow": "implement",
+              "event": "completed",
+              "timestamp": "2026-06-11T11:31:00Z"
+            },
+            {
+              "workflow": "deliver",
+              "stage": "refine",
+              "timestamp": "2026-06-11T11:31:47Z"
+            },
+            {
+              "workflow": "deliver",
+              "stage": "review",
+              "timestamp": "2026-06-11T11:32:55Z"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "b312202",
+      "title": "Functioning quote button",
+      "status": "not-started",
+      "children": [
+        {
+          "id": "09066fc",
+          "title": "Hardcoded quotes array in JS",
+          "status": "not-started",
+          "children": [],
+          "meta": {}
+        },
+        {
+          "id": "430fa4f",
+          "title": "Random quote on load and on button click",
+          "status": "not-started",
+          "children": [],
+          "meta": {}
+        }
+      ],
+      "meta": {}
+    },
+    {
+      "id": "198b883",
+      "title": "Adams-style UI styling",
+      "status": "not-started",
+      "children": [
+        {
+          "id": "86d9f7b",
+          "title": "Dark background, monospace font, layout",
+          "status": "not-started",
+          "children": [],
+          "meta": {}
+        },
+        {
+          "id": "bdabc91",
+          "title": "Glowing quote text and Adams-flavoured button label",
+          "status": "not-started",
+          "children": [],
+          "meta": {}
+        }
+      ],
+      "meta": {}
+    }
+  ]
+}
