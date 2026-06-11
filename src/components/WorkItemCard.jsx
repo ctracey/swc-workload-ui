@@ -3,7 +3,7 @@ import { mapStatus, itemProgress, itemStage, progressStages } from '../workload.
 
 const TAG_CLASS = { blocked: 't-blocked', done: 't-done', pending: 't-pending', skipped: 't-pending' }
 
-export default function WorkItemCard({ item, number, selected, onSelect }) {
+export default function WorkItemCard({ item, number, depth = 0, selected, onSelect }) {
   const pct = itemProgress(item)
   const state = mapStatus(item.status)
   const stage = itemStage(item)
@@ -18,6 +18,7 @@ export default function WorkItemCard({ item, number, selected, onSelect }) {
   return (
     <div
       className={'card' + (selected ? ' sel' : '')}
+      style={depth > 0 ? { marginLeft: depth * 18 } : undefined}
       role="option"
       aria-selected={selected}
       tabIndex={0}
@@ -26,7 +27,7 @@ export default function WorkItemCard({ item, number, selected, onSelect }) {
     >
       <div className="top">
         <span className="cid">
-          WI-{String(number).padStart(2, '0')} · {item.id}
+          WI-{number} · {item.id}
         </span>
         <span className="cpc">{pct}%</span>
       </div>

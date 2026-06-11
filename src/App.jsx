@@ -3,7 +3,7 @@ import TitleBar from './components/TitleBar.jsx'
 import Sidebar from './components/Sidebar.jsx'
 import WorkflowPanel from './components/WorkflowPanel.jsx'
 import WorkloadProgressPanel from './components/WorkloadProgressPanel.jsx'
-import { leafStatusCounts, deliverStages } from './workload.js'
+import { statusCounts, deliverStages, flattenItems } from './workload.js'
 import sample from '../ref/workload.json'
 
 // folder containing workload.json, e.g. index.html?path=../runs/quote-app
@@ -30,11 +30,11 @@ export default function App() {
   }, [])
 
   const items = workload?.items ?? []
-  const selected = items.find((item) => item.id === selectedId) ?? items[0]
+  const selected = flattenItems(items).find(({ item }) => item.id === selectedId)?.item ?? items[0]
 
   return (
     <div className="app">
-      <TitleBar path={pathParam ?? 'sample'} queueCount={workload ? items.length : undefined} />
+      <TitleBar path={pathParam ?? 'sample'} queueCount={workload ? flattenItems(items).length : undefined} />
       {error ? (
         <div className="appmsg">{error}</div>
       ) : !workload ? (
@@ -44,7 +44,7 @@ export default function App() {
           <Sidebar items={items} selectedId={selectedId} onSelect={setSelectedId} />
           <div className="main">
             {selected && <WorkflowPanel stages={deliverStages(selected)} tag={`deliver · ${selected.id}`} />}
-            <WorkloadProgressPanel counts={leafStatusCounts(items)} />
+            <WorkloadProgressPanel counts={statusCounts(items)} />
           </div>
         </div>
       )}

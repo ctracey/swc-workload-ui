@@ -3,7 +3,7 @@ import PieChart from './PieChart.jsx'
 
 export default function WorkloadProgressPanel({ counts }) {
   return (
-    <Panel title="Workload Progress" tag="leaf items">
+    <Panel title="Workload Progress" tag="all items">
       <PieChart counts={counts} />
     </Panel>
   )

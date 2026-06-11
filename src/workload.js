@@ -34,6 +34,27 @@ export function itemProgress(item) {
   return denom ? Math.round((100 * (counts.done ?? 0)) / denom) : 0
 }
 
+// status counts across the full item tree, parents included
+export function statusCounts(items) {
+  const counts = {}
+  for (const { item } of flattenItems(items)) {
+    const k = mapStatus(item.status)
+    counts[k] = (counts[k] ?? 0) + 1
+  }
+  return counts
+}
+
+// depth-first flattening of the item tree; numbers are hierarchical,
+// top-level zero-padded ("01"), nested as parent-sequenced decimals ("01.4.2")
+export function flattenItems(items, parentNumber = null, depth = 0, out = []) {
+  items.forEach((item, i) => {
+    const number = parentNumber ? `${parentNumber}.${i + 1}` : String(i + 1).padStart(2, '0')
+    out.push({ item, number, depth })
+    if (item.children?.length) flattenItems(item.children, number, depth + 1, out)
+  })
+  return out
+}
+
 // current workflow stage from swc meta, e.g. "review"
 export function itemStage(item) {
   const workflows = item.meta?.swc?.workflowState
