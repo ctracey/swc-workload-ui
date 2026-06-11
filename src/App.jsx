@@ -1,9 +1,9 @@
-import Title from './components/Title.jsx'
+import TitleBar from './components/TitleBar.jsx'
 
 export default function App() {
   return (
     <div className="app">
-      <Title text="Hello World" />
+      <TitleBar />
     </div>
   )
 }
