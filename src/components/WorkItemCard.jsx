@@ -1,5 +1,5 @@
 import ProgressBar from './ProgressBar.jsx'
-import { mapStatus, itemProgress, itemStage } from '../workload.js'
+import { mapStatus, itemProgress, itemStage, progressStages } from '../workload.js'
 
 const TAG_CLASS = { blocked: 't-blocked', done: 't-done', pending: 't-pending', skipped: 't-pending' }
 
@@ -7,7 +7,7 @@ export default function WorkItemCard({ item, number, selected, onSelect }) {
   const pct = itemProgress(item)
   const state = mapStatus(item.status)
   const stage = itemStage(item)
-  const stripStates = item.children?.length ? item.children.map((c) => mapStatus(c.status)) : [state]
+  const stripStates = progressStages(item).map((s) => (s.state === 'queued' ? 'pending' : s.state))
 
   const pick = (e) => {
     if (e.type === 'keydown' && e.key !== 'Enter' && e.key !== ' ') return

@@ -61,6 +61,24 @@ function stageStates(catalog, state) {
   }))
 }
 
+// flat 9-segment progress: deliver stages with the implement workflow
+// stages expanded inline after the deliver implement stage
+export function progressStages(item) {
+  const workflows = item.meta?.swc?.workflowState
+  const out = []
+  for (const s of stageStates(WORKFLOWS.deliver, workflows?.deliver)) {
+    out.push(s)
+    if (s.name === 'implement') {
+      // a passed implement stage implies the implement workflow completed,
+      // even when the item carries no record of it
+      const implementState =
+        workflows?.implement ?? (s.state === 'done' ? { completed: true } : undefined)
+      out.push(...stageStates(WORKFLOWS.implement, implementState))
+    }
+  }
+  return out
+}
+
 // deliver workflow stages for an item, with the implement sub-sequence
 // attached while the implement stage is active
 export function deliverStages(item) {
