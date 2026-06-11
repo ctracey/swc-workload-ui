@@ -43,3 +43,33 @@ export function itemStage(item) {
   }
   return null
 }
+
+// swc workflow stage sequences
+export const WORKFLOWS = {
+  deliver: ['requirements', 'specs', 'solution-design', 'implement', 'refine', 'review'],
+  implement: ['orient', 'implement', 'summarise'],
+}
+
+// per-stage done/active/queued from a workflowState entry ({currentStage, completed})
+function stageStates(catalog, state) {
+  if (!state) return catalog.map((name) => ({ name, state: 'queued' }))
+  if (state.completed) return catalog.map((name) => ({ name, state: 'done' }))
+  const idx = catalog.indexOf(state.currentStage)
+  return catalog.map((name, i) => ({
+    name,
+    state: idx === -1 ? 'queued' : i < idx ? 'done' : i === idx ? 'active' : 'queued',
+  }))
+}
+
+// deliver workflow stages for an item, with the implement sub-sequence
+// attached while the implement stage is active
+export function deliverStages(item) {
+  const workflows = item.meta?.swc?.workflowState
+  return stageStates(WORKFLOWS.deliver, workflows?.deliver).map((s) => {
+    const stage = { ...s, name: s.name.toUpperCase() }
+    if (s.name === 'implement' && s.state === 'active' && workflows?.implement) {
+      stage.subs = stageStates(WORKFLOWS.implement, workflows.implement)
+    }
+    return stage
+  })
+}

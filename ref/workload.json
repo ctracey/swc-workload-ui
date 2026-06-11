@@ -112,7 +112,20 @@
           "meta": {}
         }
       ],
-      "meta": {}
+      "meta": {
+        "swc": {
+          "workflowState": {
+            "deliver": {
+              "currentStage": "implement",
+              "completed": false
+            },
+            "implement": {
+              "currentStage": "implement",
+              "completed": false
+            }
+          }
+        }
+      }
     },
     {
       "id": "198b883",

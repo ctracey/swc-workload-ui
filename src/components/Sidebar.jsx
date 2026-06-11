@@ -1,9 +1,6 @@
-import { useState } from 'react'
 import WorkItemCard from './WorkItemCard.jsx'
 
-export default function Sidebar({ items }) {
-  const [selectedId, setSelectedId] = useState(items[0]?.id ?? null)
-
+export default function Sidebar({ items, selectedId, onSelect }) {
   return (
     <aside className="sidebar">
       <div className="secbar">
@@ -18,7 +15,7 @@ export default function Sidebar({ items }) {
             item={item}
             number={i + 1}
             selected={item.id === selectedId}
-            onSelect={() => setSelectedId(item.id)}
+            onSelect={() => onSelect(item.id)}
           />
         ))}
       </div>
