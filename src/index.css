@@ -136,11 +136,184 @@ body::before {
 /* ---- body layout ---- */
 .body {
   display: grid;
+  grid-template-columns: 300px 1fr;
+  min-height: 0;
+}
+
+.main {
+  display: grid;
   grid-template-columns: 380px;
   justify-content: end;
   align-content: start;
   padding: 18px;
   min-height: 0;
+}
+
+/* ---- sidebar ---- */
+.sidebar {
+  background: var(--panel);
+  border-right: 3px solid var(--line-2);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.secbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 16px;
+  border-bottom: 1px solid var(--line);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--mute);
+}
+
+.secbar .tk {
+  width: 14px;
+  height: 14px;
+  background: var(--yellow);
+}
+
+.secbar .cnt {
+  margin-left: auto;
+  color: var(--ink);
+}
+
+.cardlist {
+  overflow: auto;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ---- workitem card ---- */
+.card {
+  border: 1px solid var(--line-2);
+  background: var(--panel-2);
+  cursor: pointer;
+  position: relative;
+  transition: border-color 0.12s, background 0.12s;
+}
+
+.card:hover {
+  border-color: var(--mute);
+}
+
+.card:focus-visible {
+  outline: 2px solid var(--yellow);
+  outline-offset: 2px;
+}
+
+.card.sel {
+  border-color: var(--yellow);
+}
+
+.card .top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--line);
+  background: var(--panel);
+}
+
+.card.sel .top {
+  background: var(--yellow);
+  color: var(--black);
+  border-bottom-color: var(--yellow-dim);
+}
+
+.card .top .cid {
+  font-size: 10px;
+  letter-spacing: 0.08em;
+}
+
+.card .top .cpc {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-weight: 800;
+  font-size: 13px;
+}
+
+.card .mid {
+  padding: 9px 10px 11px;
+}
+
+.card .nm {
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: -0.01em;
+  margin-bottom: 8px;
+}
+
+.card .row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 10px;
+  color: var(--mute);
+  margin-bottom: 9px;
+}
+
+.card .tag {
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border: 1px solid currentColor;
+}
+
+.strip {
+  display: flex;
+  gap: 2px;
+}
+
+.strip i {
+  flex: 1;
+  height: 9px;
+  background: var(--panel);
+}
+
+.strip i.done {
+  background: var(--yellow);
+}
+
+.strip i.active {
+  background: var(--hatch), var(--panel-2);
+  border: 1px solid var(--yellow);
+}
+
+.strip i.blocked {
+  background: var(--hazard);
+  background-size: 6px 6px;
+}
+
+.strip i.pending {
+  background: var(--raised);
+}
+
+.strip i.skipped {
+  background: repeating-linear-gradient(45deg, var(--line-2) 0 2px, transparent 2px 5px);
+}
+
+.t-active {
+  color: var(--yellow);
+}
+
+.t-blocked {
+  color: var(--ink);
+}
+
+.card .tag.t-done {
+  background: var(--yellow);
+  color: var(--black);
+  border-color: var(--yellow);
+}
+
+.t-pending {
+  color: var(--mute);
 }
 
 /* ---- panel ---- */

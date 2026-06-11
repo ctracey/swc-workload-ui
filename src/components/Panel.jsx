@@ -1,4 +1,4 @@
-export default function Panel({ title, tag, right, rivets = 'abcd', children }) {
+export default function Panel({ title, tag, rivets = 'abcd', children }) {
   return (
     <div className="panel">
       {[...rivets].map((r) => (
@@ -7,8 +7,7 @@ export default function Panel({ title, tag, right, rivets = 'abcd', children }) 
       <div className="phead">
         <span className="tk"></span>
         <span>{title}</span>
-        {tag && <span className="tag">{tag}</span>}
-        {right && <span className="right">{right}</span>}
+        {tag && <span className="right">{tag}</span>}
       </div>
       <div className="pbody">{children}</div>
     </div>

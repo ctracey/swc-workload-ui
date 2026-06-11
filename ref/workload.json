@@ -3,19 +3,19 @@
     {
       "id": "b6449d9",
       "title": "Basic HTML scaffold",
-      "status": "in-progress",
+      "status": "done",
       "children": [
         {
           "id": "c4036f3",
           "title": "index.html with page structure, title, and quote display area",
-          "status": "not-started",
+          "status": "done",
           "children": [],
           "meta": {}
         },
         {
           "id": "b4785b4",
           "title": "Button element with placeholder label",
-          "status": "not-started",
+          "status": "done",
           "children": [],
           "meta": {}
         }
@@ -24,8 +24,8 @@
         "swc": {
           "workflowState": {
             "deliver": {
-              "currentStage": "review",
-              "completed": false
+              "currentStage": null,
+              "completed": true
             },
             "implement": {
               "currentStage": null,
@@ -95,12 +95,12 @@
     {
       "id": "b312202",
       "title": "Functioning quote button",
-      "status": "not-started",
+      "status": "in-progress",
       "children": [
         {
           "id": "09066fc",
           "title": "Hardcoded quotes array in JS",
-          "status": "not-started",
+          "status": "in-progress",
           "children": [],
           "meta": {}
         },
