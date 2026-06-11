@@ -92,3 +92,50 @@ body::before {
   padding: 1px 6px;
   margin-left: 5px;
 }
+
+/* ---- readouts ---- */
+.readouts {
+  display: flex;
+  align-items: stretch;
+}
+
+.ro {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 16px;
+  border-left: 1px solid var(--line);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--mute);
+}
+
+.ro b {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.led {
+  width: 8px;
+  height: 8px;
+  background: var(--yellow);
+  box-shadow: 0 0 9px var(--yellow);
+  border-radius: 50%;
+}
+
+.live .led {
+  animation: blink 2s steps(1) infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0.2;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
