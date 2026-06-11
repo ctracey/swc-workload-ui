@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OPS // TRACKER — HUD</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#04090f;
+  --panel:rgba(79,213,255,0.035);
+  --panel-strong:rgba(79,213,255,0.08);
+  --line:#1d4459;
+  --line-dim:#16303f;
+  --cyan:#4fd5ff;
+  --teal:#2a7d9e;
+  --text:#b8d8e6;
+  --text-soft:#9cc3d4;
+  --muted:#5d8aa0;
+  --amber:#ffb454;
+  --glow:0 0 12px rgba(79,213,255,0.35);
+  --display:"Rajdhani",sans-serif;
+  --mono:"Share Tech Mono",monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--display);
+  overflow:hidden;
+}
+body::after{
+  content:"";position:fixed;inset:0;pointer-events:none;
+  background:repeating-linear-gradient(0deg,rgba(79,213,255,0.025) 0 1px,transparent 1px 4px);
+}
+.app{display:grid;grid-template-rows:52px 1fr;height:100vh}
+
+/* ---------- header ---------- */
+header{
+  display:flex;justify-content:space-between;align-items:center;
+  border-bottom:1px solid var(--line);padding:0 20px;
+}
+.brand{font-size:16px;font-weight:600;letter-spacing:6px;color:var(--cyan);text-shadow:var(--glow)}
+.brand span{color:var(--teal);font-weight:400}
+.hstats{display:flex;gap:18px;align-items:center;font-family:var(--mono);font-size:12px;color:var(--muted)}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:var(--glow);margin-right:6px;animation:pulse 2.4s infinite}
+.badge{border:1px solid var(--teal);color:var(--cyan);padding:3px 12px;border-radius:2px;letter-spacing:1px}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+
+/* ---------- layout ---------- */
+.main{display:grid;grid-template-columns:236px 1fr;min-height:0}
+.sidebar{
+  border-right:1px solid var(--line);padding:14px;
+  display:flex;flex-direction:column;gap:10px;overflow-y:auto;
+}
+.sidebar::-webkit-scrollbar{width:4px}
+.sidebar::-webkit-scrollbar-thumb{background:var(--line)}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:4px;color:var(--muted)}
+
+/* ---------- unit cards ---------- */
+.card{
+  position:relative;text-align:left;width:100%;
+  background:transparent;border:1px solid var(--line);border-radius:2px;
+  padding:10px 11px;cursor:pointer;color:var(--text);
+  font-family:var(--display);
+  transition:border-color .2s,background .2s;
+}
+.card:hover{border-color:var(--teal)}
+.card:focus-visible{outline:1px solid var(--cyan);outline-offset:2px}
+.card.active{background:var(--panel-strong);border-color:var(--cyan)}
+.card.active::before,.card.active::after{content:"";position:absolute;width:9px;height:9px}
+.card.active::before{top:-1px;left:-1px;border-top:2px solid var(--cyan);border-left:2px solid var(--cyan)}
+.card.active::after{bottom:-1px;right:-1px;border-bottom:2px solid var(--cyan);border-right:2px solid var(--cyan)}
+.card .row{display:flex;justify-content:space-between;align-items:baseline}
+.card .id{font-size:15px;font-weight:600;letter-spacing:2px;color:var(--text-soft)}
+.card.active .id{color:var(--cyan);text-shadow:var(--glow)}
+.card .pct{font-family:var(--mono);font-size:13px;color:var(--muted)}
+.card.active .pct{color:var(--cyan)}
+.card .meta{font-family:var(--mono);font-size:11px;color:var(--muted);margin:3px 0 8px}
+.card .meta em{font-style:normal;color:var(--amber)}
+.bar{height:4px;background:var(--line-dim);position:relative}
+.bar i{position:absolute;inset:0 auto 0 0;background:var(--teal);transition:width .5s ease}
+.card.active .bar i{background:var(--cyan);box-shadow:var(--glow)}
+.ghost{
+  background:transparent;border:1px dashed var(--teal);color:var(--muted);
+  font-family:var(--mono);font-size:11px;letter-spacing:3px;padding:9px;
+  border-radius:2px;cursor:pointer;transition:color .2s,border-color .2s;
+}
+.ghost:hover{color:var(--cyan);border-color:var(--cyan)}
+.ghost:focus-visible{outline:1px solid var(--cyan);outline-offset:2px}
+
+/* ---------- right side ---------- */
+.content{display:grid;grid-template-rows:minmax(178px,27%) 1fr;min-height:0}
+.workflow{border-bottom:1px solid var(--line);padding:12px 18px 4px;min-height:0}
+.panel-head{display:flex;justify-content:space-between;align-items:baseline}
+.panel-head .pct{font-family:var(--mono);font-size:12px;color:var(--cyan);letter-spacing:2px}
+#flow{width:100%;height:calc(100% - 18px)}
+
+.bottom{display:grid;grid-template-columns:1.45fr 1fr;min-height:0}
+.log{border-right:1px solid var(--line);padding:14px 18px;display:flex;flex-direction:column;min-height:0;position:relative}
+.log::after{content:"";position:absolute;top:10px;right:12px;width:11px;height:11px;border-top:1px solid var(--teal);border-right:1px solid var(--teal)}
+.entries{flex:1;overflow-y:auto;margin-top:10px;font-family:var(--mono);font-size:12.5px;line-height:1.75;color:var(--text-soft);padding-right:6px}
+.entries::-webkit-scrollbar{width:4px}
+.entries::-webkit-scrollbar-thumb{background:var(--line)}
+.entries p{margin-bottom:9px}
+.entries .t{color:var(--cyan)}
+.entries .warn .t{color:var(--amber)}
+.entries .idle{color:var(--muted)}
+.notebox{display:flex;gap:8px;margin-top:10px}
+.notebox input{
+  flex:1;background:var(--panel);border:1px solid var(--line);border-radius:2px;
+  color:var(--text);font-family:var(--mono);font-size:12.5px;padding:9px 11px;
+}
+.notebox input::placeholder{color:var(--muted)}
+.notebox input:focus{outline:none;border-color:var(--cyan);box-shadow:0 0 0 1px rgba(79,213,255,.25)}
+.notebox button{
+  background:var(--panel-strong);border:1px solid var(--teal);color:var(--cyan);
+  font-family:var(--mono);font-size:11px;letter-spacing:2px;padding:0 14px;
+  border-radius:2px;cursor:pointer;transition:background .2s;
+}
+.notebox button:hover{background:rgba(79,213,255,.15)}
+.notebox button:focus-visible{outline:1px solid var(--cyan);outline-offset:2px}
+
+.gauge-panel{padding:14px 18px;display:flex;flex-direction:column;min-height:0}
+.gauge-wrap{flex:1;display:flex;align-items:center;justify-content:center;gap:20px;min-height:0}
+#gauge{max-height:100%;}
+.legend{font-family:var(--mono);font-size:12px;display:flex;flex-direction:column;gap:9px;color:var(--text-soft)}
+.legend i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:7px;vertical-align:-1px}
+.spin{transform-origin:center;animation:spin 24s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+@media (max-width:840px){
+  body{overflow:auto}
+  .app{height:auto}
+  .main{grid-template-columns:1fr}
+  .sidebar{flex-direction:row;overflow-x:auto;border-right:none;border-bottom:1px solid var(--line)}
+  .sidebar .eyebrow{display:none}
+  .card{min-width:180px}
+  .bottom{grid-template-columns:1fr}
+  .log{border-right:none;border-bottom:1px solid var(--line)}
+  .workflow{min-height:200px}
+  #flow{height:180px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="brand">OPS // TRACKER <span>· HUD MODE</span></div>
+    <div class="hstats">
+      <span><i class="dot"></i>ONLINE</span>
+      <span class="badge" id="active-count">4 ACTIVE</span>
+    </div>
+  </header>
+
+  <div class="main">
+    <nav class="sidebar" id="sidebar" aria-label="Units">
+      <div class="eyebrow">UNITS</div>
+      <button class="ghost" id="new-unit">+ NEW UNIT</button>
+    </nav>
+
+    <div class="content">
+      <section class="workflow" aria-label="Workflow">
+        <div class="panel-head">
+          <span class="eyebrow" id="flow-title">WORKFLOW</span>
+          <span class="pct" id="flow-pct"></span>
+        </div>
+        <svg id="flow" viewBox="0 0 640 150" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Workflow stages"></svg>
+      </section>
+
+      <div class="bottom">
+        <section class="log" aria-label="Log and notes">
+          <span class="eyebrow">LOG · NOTES</span>
+          <div class="entries" id="entries"></div>
+          <form class="notebox" id="noteform">
+            <input id="noteinput" placeholder="append note" aria-label="Append note" autocomplete="off">
+            <button type="submit">LOG</button>
+          </form>
+        </section>
+
+        <section class="gauge-panel" aria-label="Overall progress">
+          <span class="eyebrow">OVERALL</span>
+          <div class="gauge-wrap">
+            <svg id="gauge" viewBox="0 0 150 150" width="150" height="150" role="img" aria-label="Overall progress gauge"></svg>
+            <div class="legend" id="legend"></div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const STAGES = ["INTAKE","ANALYSIS","BUILD","REVIEW","DEPLOY"];
+
+const UNITS = [
+  {
+    id:"RELAY-077", meta:"core · build", risk:false,
+    stages:[
+      {name:"INTAKE",state:"done"},
+      {name:"ANALYSIS",state:"done"},
+      {name:"BUILD",state:"active",subs:[
+        {name:"spec",state:"done"},{name:"wiring",state:"done"},
+        {name:"firmware",state:"active"},{name:"stress test",state:"queued"}
+      ]},
+      {name:"REVIEW",state:"queued"},
+      {name:"DEPLOY",state:"queued"}
+    ],
+    pie:{done:62,active:13,queued:25},
+    log:[
+      {t:"09:42",msg:"firmware flash failed on bench unit 2. rolled back to rev 1.3, retrying with patched loader.",warn:true},
+      {t:"08:15",msg:"wiring sub-stage signed off. thermal margins within spec."},
+      {t:"",msg:"… awaiting parts for stress rig",idle:true}
+    ]
+  },
+  {
+    id:"NODE-114", meta:"infra · review", risk:false,
+    stages:[
+      {name:"INTAKE",state:"done"},
+      {name:"ANALYSIS",state:"done"},
+      {name:"BUILD",state:"done"},
+      {name:"REVIEW",state:"active",subs:[
+        {name:"lint pass",state:"done"},{name:"peer audit",state:"active"},{name:"sign-off",state:"queued"}
+      ]},
+      {name:"DEPLOY",state:"queued"}
+    ],
+    pie:{done:81,active:9,queued:10},
+    log:[
+      {t:"11:03",msg:"peer audit opened — two reviewers assigned, ETA tomorrow."},
+      {t:"10:20",msg:"build artifacts archived to cold store."},
+      {t:"",msg:"… review queue position: 2",idle:true}
+    ]
+  },
+  {
+    id:"GRID-203", meta:"edge · intake", risk:true,
+    stages:[
+      {name:"INTAKE",state:"active",subs:[
+        {name:"survey",state:"active"},{name:"permits",state:"queued"}
+      ]},
+      {name:"ANALYSIS",state:"queued"},
+      {name:"BUILD",state:"queued"},
+      {name:"REVIEW",state:"queued"},
+      {name:"DEPLOY",state:"queued"}
+    ],
+    pie:{done:12,active:8,queued:80},
+    log:[
+      {t:"07:55",msg:"site survey delayed by weather — rescheduled to friday.",warn:true},
+      {t:"07:10",msg:"intake checklist generated for edge sector 3."},
+      {t:"",msg:"… blocked: permit office response pending",idle:true}
+    ]
+  },
+  {
+    id:"FLUX-009", meta:"core · deploy", risk:false,
+    stages:[
+      {name:"INTAKE",state:"done"},
+      {name:"ANALYSIS",state:"done"},
+      {name:"BUILD",state:"done"},
+      {name:"REVIEW",state:"done"},
+      {name:"DEPLOY",state:"active",subs:[
+        {name:"canary",state:"done"},{name:"rollout 50%",state:"active"},{name:"rollout 100%",state:"queued"}
+      ]}
+    ],
+    pie:{done:97,active:2,queued:1},
+    log:[
+      {t:"12:31",msg:"canary cohort healthy for 6h — promoting to 50% rollout."},
+      {t:"09:00",msg:"deploy window approved by ops council."},
+      {t:"",msg:"… monitoring error budget burn",idle:true}
+    ]
+  }
+];
+
+const pctOf = u => u.pie.done + Math.round(u.pie.active/2);
+let selected = 0;
+
+/* ---------- sidebar ---------- */
+function renderSidebar(){
+  const sb = document.getElementById("sidebar");
+  sb.querySelectorAll(".card").forEach(c=>c.remove());
+  const ghost = document.getElementById("new-unit");
+  UNITS.forEach((u,i)=>{
+    const stageIdx = u.stages.findIndex(s=>s.state==="active");
+    const stg = stageIdx===-1 ? u.stages.length : stageIdx+1;
+    const card = document.createElement("button");
+    card.className = "card"+(i===selected?" active":"");
+    card.setAttribute("aria-pressed", i===selected);
+    card.innerHTML = `
+      <div class="row"><span class="id">${u.id}</span><span class="pct">${pctOf(u)}%</span></div>
+      <div class="meta">${u.meta} · stg ${stg}/5 ${u.risk?"<em>· at risk</em>":""}</div>
+      <div class="bar"><i style="width:${pctOf(u)}%"></i></div>`;
+    card.addEventListener("click",()=>{ selected=i; renderAll(); });
+    sb.insertBefore(card, ghost);
+  });
+}
+
+/* ---------- workflow svg ---------- */
+const NS = "http://www.w3.org/2000/svg";
+function el(name, attrs, parent){
+  const e = document.createElementNS(NS,name);
+  for(const k in attrs) e.setAttribute(k,attrs[k]);
+  if(parent) parent.appendChild(e);
+  return e;
+}
+function renderFlow(){
+  const u = UNITS[selected];
+  const svg = document.getElementById("flow");
+  svg.innerHTML = "";
+  document.getElementById("flow-title").textContent = `WORKFLOW · ${u.id}`;
+  document.getElementById("flow-pct").textContent = `${pctOf(u)}% COMPLETE`;
+
+  const n = u.stages.length, x0=55, x1=585, y=44;
+  const step = (x1-x0)/(n-1);
+
+  u.stages.forEach((s,i)=>{
+    if(i===0) return;
+    const a = u.stages[i-1], xA=x0+(i-1)*step, xB=x0+i*step;
+    const traversed = a.state==="done";
+    el("line",{x1:xA,y1:y,x2:xB,y2:y,
+      stroke:traversed?"var(--cyan)":"var(--teal)",
+      "stroke-width":traversed?1.5:1,
+      "stroke-dasharray":traversed?"none":"4 4"},svg);
+  });
+
+  u.stages.forEach((s,i)=>{
+    const x = x0+i*step;
+    if(s.state==="done"){
+      el("circle",{cx:x,cy:y,r:12,fill:"var(--cyan)"},svg);
+      el("path",{d:`M${x-5} ${y} l3.5 3.5 l6.5 -7`,fill:"none",stroke:"var(--bg)","stroke-width":2},svg);
+    } else if(s.state==="active"){
+      el("circle",{cx:x,cy:y,r:17,fill:"none",stroke:"var(--cyan)","stroke-width":1.5},svg);
+      const ring = el("circle",{cx:x,cy:y,r:11.5,fill:"none",stroke:"var(--cyan)","stroke-width":1,"stroke-dasharray":"3 3",class:"spin"},svg);
+      ring.style.transformOrigin = `${x}px ${y}px`;
+      el("circle",{cx:x,cy:y,r:5,fill:"var(--cyan)"},svg);
+    } else {
+      el("circle",{cx:x,cy:y,r:12,fill:"none",stroke:"var(--teal)","stroke-width":1},svg);
+    }
+    const t = el("text",{x:x,y:y+(s.state==="active"?34:30),"text-anchor":"middle",
+      fill:s.state==="active"?"var(--cyan)":(s.state==="done"?"var(--text-soft)":"var(--muted)"),
+      "font-size":12,"letter-spacing":2,"font-family":"var(--display)","font-weight":500},svg);
+    t.textContent = s.name;
+  });
+
+  const activeIdx = u.stages.findIndex(s=>s.state==="active");
+  if(activeIdx>-1 && u.stages[activeIdx].subs){
+    const subs = u.stages[activeIdx].subs;
+    const ax = x0+activeIdx*step, sy=108;
+    el("line",{x1:ax,y1:y+17,x2:ax,y2:sy-14,stroke:"var(--cyan)","stroke-width":1},svg);
+    const span = Math.min(90*(subs.length-1), 360);
+    let sx0 = ax - span/2;
+    sx0 = Math.max(40, Math.min(sx0, 600-span));
+    el("line",{x1:sx0,y1:sy,x2:sx0+span,y2:sy,stroke:"var(--line)","stroke-width":1},svg);
+    subs.forEach((sub,j)=>{
+      const sx = sx0 + (subs.length>1 ? j*span/(subs.length-1) : span/2);
+      if(sub.state==="done"){
+        el("circle",{cx:sx,cy:sy,r:6,fill:"var(--cyan)"},svg);
+      } else if(sub.state==="active"){
+        el("circle",{cx:sx,cy:sy,r:6,fill:"none",stroke:"var(--cyan)","stroke-width":1.5},svg);
+        el("circle",{cx:sx,cy:sy,r:2.5,fill:"var(--cyan)"},svg);
+      } else {
+        el("circle",{cx:sx,cy:sy,r:6,fill:"none",stroke:"var(--teal)","stroke-width":1},svg);
+      }
+      const st = el("text",{x:sx,y:sy+22,"text-anchor":"middle",
+        fill:sub.state==="active"?"var(--cyan)":(sub.state==="done"?"var(--text-soft)":"var(--muted)"),
+        "font-size":11.5,"font-family":"var(--mono)"},svg);
+      st.textContent = sub.name;
+    });
+    const doneSubs = subs.filter(s=>s.state==="done").length + (subs.some(s=>s.state==="active")?1:0);
+    const lbl = el("text",{x:ax,y:sy+40,"text-anchor":"middle",fill:"var(--teal)","font-size":10.5,"letter-spacing":2,"font-family":"var(--mono)"},svg);
+    lbl.textContent = `SUB-SEQUENCE ${doneSubs}/${subs.length}`;
+  }
+}
+
+/* ---------- gauge ---------- */
+function renderGauge(){
+  const u = UNITS[selected];
+  const svg = document.getElementById("gauge");
+  svg.innerHTML = "";
+  const C=75, R=50, circ=2*Math.PI*R;
+
+  const ticks = el("g",{stroke:"var(--line)","stroke-width":1,class:"spin"},svg);
+  ticks.style.animationDuration = "40s";
+  for(let a=0;a<360;a+=30){
+    const r1=66,r2=72, rad=a*Math.PI/180;
+    el("line",{x1:C+r1*Math.cos(rad),y1:C+r1*Math.sin(rad),x2:C+r2*Math.cos(rad),y2:C+r2*Math.sin(rad)},ticks);
+  }
+  el("circle",{cx:C,cy:C,r:60,fill:"none",stroke:"var(--line-dim)","stroke-width":1},svg);
+  el("circle",{cx:C,cy:C,r:R,fill:"none",stroke:"var(--line-dim)","stroke-width":10},svg);
+
+  const segActive = el("circle",{cx:C,cy:C,r:R,fill:"none",stroke:"var(--teal)","stroke-width":10,
+    transform:`rotate(-90 ${C} ${C})`},svg);
+  const segDone = el("circle",{cx:C,cy:C,r:R,fill:"none",stroke:"var(--cyan)","stroke-width":10,
+    transform:`rotate(-90 ${C} ${C})`},svg);
+  el("circle",{cx:C,cy:C,r:37,fill:"none",stroke:"var(--line)","stroke-width":1,"stroke-dasharray":"2 4"},svg);
+
+  const pctText = el("text",{x:C,y:C-2,"text-anchor":"middle",fill:"var(--cyan)","font-size":24,
+    "font-family":"var(--display)","font-weight":600},svg);
+  const sub = el("text",{x:C,y:C+15,"text-anchor":"middle",fill:"var(--muted)","font-size":9,
+    "letter-spacing":3,"font-family":"var(--mono)"},svg);
+  sub.textContent = "COMPLETE";
+
+  const target = u.pie;
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const dur = reduced ? 0 : 600, start = performance.now();
+  function frame(now){
+    const k = dur===0 ? 1 : Math.min(1,(now-start)/dur);
+    const e = 1-Math.pow(1-k,3);
+    const d = target.done*e, a = target.active*e;
+    segDone.setAttribute("stroke-dasharray",`${circ*d/100} ${circ}`);
+    segActive.setAttribute("stroke-dasharray",`${circ*(d+a)/100} ${circ}`);
+    pctText.textContent = Math.round(pctOf(u)*e)+"%";
+    if(k<1) requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+
+  document.getElementById("legend").innerHTML = `
+    <div><i style="background:var(--cyan);box-shadow:var(--glow)"></i>done ${target.done}%</div>
+    <div><i style="background:var(--teal)"></i>active ${target.active}%</div>
+    <div><i style="background:var(--line-dim);border:1px solid var(--line)"></i>queued ${target.queued}%</div>`;
+}
+
+/* ---------- log ---------- */
+function renderLog(){
+  const u = UNITS[selected];
+  const box = document.getElementById("entries");
+  box.innerHTML = u.log.map(e=>{
+    if(e.idle) return `<p class="idle">${e.msg}</p>`;
+    return `<p class="${e.warn?"warn":""}"><span class="t">${e.t}</span> — ${e.msg}</p>`;
+  }).join("");
+}
+
+document.getElementById("noteform").addEventListener("submit",e=>{
+  e.preventDefault();
+  const input = document.getElementById("noteinput");
+  const msg = input.value.trim();
+  if(!msg) return;
+  const now = new Date();
+  const t = String(now.getHours()).padStart(2,"0")+":"+String(now.getMinutes()).padStart(2,"0");
+  UNITS[selected].log.unshift({t,msg});
+  input.value = "";
+  renderLog();
+});
+
+document.getElementById("new-unit").addEventListener("click",()=>{
+  const id = "UNIT-"+String(Math.floor(Math.random()*900)+100);
+  UNITS.push({
+    id, meta:"unassigned · intake", risk:false,
+    stages: STAGES.map((n,i)=>({name:n,state:i===0?"active":"queued",subs:i===0?[{name:"scope",state:"active"},{name:"assign",state:"queued"}]:undefined})),
+    pie:{done:0,active:5,queued:95},
+    log:[{t:"now",msg:`${id.toLowerCase()} registered — awaiting scope definition.`}]
+  });
+  selected = UNITS.length-1;
+  document.getElementById("active-count").textContent = UNITS.length+" ACTIVE";
+  renderAll();
+});
+
+function renderAll(){
+  renderSidebar();
+  renderFlow();
+  renderGauge();
+  renderLog();
+}
+renderAll();
+</script>
+</body>
+</html>
