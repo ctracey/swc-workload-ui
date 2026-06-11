@@ -133,6 +133,13 @@ body::before {
   }
 }
 
+.appmsg {
+  padding: 24px;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  color: var(--mute);
+}
+
 /* ---- body layout ---- */
 .body {
   display: grid;

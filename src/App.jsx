@@ -1,29 +1,53 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import TitleBar from './components/TitleBar.jsx'
 import Sidebar from './components/Sidebar.jsx'
 import WorkflowPanel from './components/WorkflowPanel.jsx'
 import WorkloadProgressPanel from './components/WorkloadProgressPanel.jsx'
 import { leafStatusCounts, deliverStages } from './workload.js'
-import workload from '../ref/workload.json'
+import sample from '../ref/workload.json'
 
-// placeholder until the app can open a workload.json from disk
-const workloadPath = 'ref'
+// folder containing workload.json, e.g. index.html?path=../runs/quote-app
+const pathParam = new URLSearchParams(window.location.search).get('path')
+
+function workloadUrl(path) {
+  return (path.endsWith('/') ? path : path + '/') + 'workload.json'
+}
 
 export default function App() {
-  const [selectedId, setSelectedId] = useState(workload.items[0]?.id ?? null)
-  const selected = workload.items.find((item) => item.id === selectedId) ?? workload.items[0]
-  const counts = leafStatusCounts(workload.items)
+  const [workload, setWorkload] = useState(pathParam ? null : sample)
+  const [error, setError] = useState(null)
+  const [selectedId, setSelectedId] = useState(null)
+
+  useEffect(() => {
+    if (!pathParam) return
+    fetch(workloadUrl(pathParam))
+      .then((res) => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`)
+        return res.json()
+      })
+      .then(setWorkload)
+      .catch((err) => setError(`failed to load ${workloadUrl(pathParam)} — ${err.message}`))
+  }, [])
+
+  const items = workload?.items ?? []
+  const selected = items.find((item) => item.id === selectedId) ?? items[0]
 
   return (
     <div className="app">
-      <TitleBar path={workloadPath} queueCount={workload.items.length} />
-      <div className="body">
-        <Sidebar items={workload.items} selectedId={selectedId} onSelect={setSelectedId} />
-        <div className="main">
-          <WorkflowPanel stages={deliverStages(selected)} tag={`deliver · ${selected.id}`} />
-          <WorkloadProgressPanel counts={counts} />
+      <TitleBar path={pathParam ?? 'sample'} queueCount={workload ? items.length : undefined} />
+      {error ? (
+        <div className="appmsg">{error}</div>
+      ) : !workload ? (
+        <div className="appmsg">loading workload…</div>
+      ) : (
+        <div className="body">
+          <Sidebar items={items} selectedId={selectedId} onSelect={setSelectedId} />
+          <div className="main">
+            {selected && <WorkflowPanel stages={deliverStages(selected)} tag={`deliver · ${selected.id}`} />}
+            <WorkloadProgressPanel counts={leafStatusCounts(items)} />
+          </div>
         </div>
-      </div>
+      )}
     </div>
   )
 }

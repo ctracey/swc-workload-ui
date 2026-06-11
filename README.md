@@ -51,6 +51,18 @@ To preview the production build through a local server instead:
 npm run preview
 ```
 
+## Loading a workload
+
+The app loads `workload.json` from the folder given in the `path` query parameter (relative to the HTML file, or absolute):
+
+```
+index.html?path=../runs/quote-app
+```
+
+Without the parameter it falls back to the bundled sample data (PATH readout shows `sample`).
+
+Note: when the HTML file is opened via `file://`, most browsers block fetching local files, so the `path` parameter generally requires serving the file over HTTP (e.g. `npm run preview` or any static server).
+
 ## Project structure
 
 ```
