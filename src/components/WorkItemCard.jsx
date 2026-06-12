@@ -33,7 +33,16 @@ export default function WorkItemCard({ item, number, selectedId, onSelect }) {
         <span className="cid">
           WI-{number} · {item.id}
         </span>
-        <span className="cpc">{pct}%</span>
+        <span className="cpc">
+          {state === 'done' ? (
+            <svg className="donetick" viewBox="0 0 24 24" role="img" aria-label="done">
+              <circle cx="12" cy="12" r="12" />
+              <path d="M7 12 l3.5 3.5 l6.5 -7" fill="none" strokeWidth="2.5" />
+            </svg>
+          ) : (
+            `${pct}%`
+          )}
+        </span>
       </div>
       <div className="mid">
         <div className="nm">{item.title}</div>

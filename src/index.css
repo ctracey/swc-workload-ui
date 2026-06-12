@@ -337,6 +337,29 @@ body::before {
   font-size: 13px;
 }
 
+/* done tick: same look as a completed workflow stage, sized to the cpc font */
+.donetick {
+  display: block;
+  width: 1.05em;
+  height: 1.05em;
+}
+
+.donetick circle {
+  fill: var(--yellow);
+}
+
+.donetick path {
+  stroke: var(--bg);
+}
+
+.card.sel .donetick circle {
+  fill: var(--black);
+}
+
+.card.sel .donetick path {
+  stroke: var(--yellow);
+}
+
 .card .mid {
   padding: 9px 10px 11px;
 }
