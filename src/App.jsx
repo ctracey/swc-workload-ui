@@ -70,6 +70,7 @@ export default function App() {
       <TitleBar
         path={pathParam ?? 'none'}
         queueCount={workload ? flattenItems(items).length : undefined}
+        onHome={() => setView('home')}
       />
       <div className="app-body">
         <NavRail view={view} onView={setView} />
@@ -95,7 +96,7 @@ export default function App() {
               </div>
             )
           ) : view === 'home' ? (
-            <HomeView />
+            <HomeView path={pathParam} />
           ) : view === 'stack' ? (
             <StackView />
           ) : view === 'about' ? (

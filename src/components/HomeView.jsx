@@ -1,7 +1,9 @@
-export default function HomeView() {
+import SelectWorkloadPanel from './SelectWorkloadPanel.jsx'
+
+export default function HomeView({ path }) {
   return (
-    <div className="placeholder-view">
-      <span>HOME</span>
+    <div className="main">
+      <SelectWorkloadPanel initialPath={path ?? ''} />
     </div>
   )
 }
