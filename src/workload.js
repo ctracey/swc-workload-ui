@@ -12,11 +12,18 @@ export function mapStatus(status) {
   return STATUS_MAP[status] ?? 'pending'
 }
 
-// completion percentage of an item: share of its progress segments that are done
+// completion percentage of an item: done progress segments over total
+// segments, summed across the item itself and all of its descendants
 export function itemProgress(item) {
-  const stages = progressStages(item)
-  const done = stages.filter((s) => s.state === 'done').length
-  return Math.round((100 * done) / stages.length)
+  const members = [item, ...flattenItems(item.children ?? []).map((entry) => entry.item)]
+  let done = 0
+  let total = 0
+  for (const member of members) {
+    const stages = progressStages(member)
+    done += stages.filter((s) => s.state === 'done').length
+    total += stages.length
+  }
+  return total ? Math.round((100 * done) / total) : 0
 }
 
 // status counts across the full item tree, parents included
