@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>MONOLITH — Nav Icon Set · v2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0f0f11;--panel:#151518;--panel-2:#1b1b20;--raised:#222228;
+    --line:#2c2c33;--line-2:#3e3e47;--ink:#e7e7e3;--mute:#8a8a93;--dim:#56565e;
+    --yellow:#ffd400;--yellow-dim:#b89800;--black:#0a0a0a;
+    --hazard:repeating-linear-gradient(45deg,var(--yellow) 0 9px,var(--black) 9px 18px);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:var(--bg);color:var(--ink);font-family:"Space Mono",ui-monospace,monospace;font-size:13px;line-height:1.5;min-height:100dvh}
+  body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background-image:radial-gradient(var(--line) .8px,transparent .8px);background-size:18px 18px;opacity:.35}
+  .display{font-family:"Bricolage Grotesque",sans-serif}
+  .wrap{position:relative;z-index:1;display:grid;grid-template-columns:104px 1fr;min-height:100dvh}
+
+  /* ---------- NAV RAIL (live, in-context) ---------- */
+  .rail{background:var(--panel);border-right:3px solid var(--line-2);display:flex;flex-direction:column;align-items:center;padding:14px 0;gap:6px}
+  .rail .logo{width:40px;height:40px;display:grid;place-items:center;background:var(--yellow);color:var(--black);
+    font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:22px;margin-bottom:14px}
+  .navitem{position:relative;width:72px;display:flex;flex-direction:column;align-items:center;gap:5px;padding:10px 0;
+    cursor:pointer;border:1px solid transparent;color:var(--mute);transition:color .1s,background .1s,border-color .1s}
+  .navitem:hover{color:var(--ink);background:var(--panel-2)}
+  .navitem:focus-visible{outline:2px solid var(--yellow);outline-offset:2px}
+  .navitem .ico{width:26px;height:26px;display:block}
+  .navitem .lab{font-size:8.5px;letter-spacing:.08em;text-transform:uppercase}
+  .navitem.active{background:var(--yellow);color:var(--black);border-color:var(--yellow-dim)}
+  .navitem.active::before{content:"";position:absolute;left:-3px;top:0;bottom:0;width:3px;background:var(--hazard)}
+
+  /* ---------- SPEC BOARD ---------- */
+  .board{padding:28px 30px 50px;min-width:0}
+  .head{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:6px}
+  .head h1{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:26px;letter-spacing:-.02em;margin:0}
+  .head h1 b{background:var(--yellow);color:var(--black);padding:1px 7px}
+  .head .v{font-size:10px;letter-spacing:.2em;color:var(--mute);border:1px solid var(--line-2);padding:2px 7px}
+  .sub{color:var(--mute);font-size:12px;margin:0 0 26px;max-width:640px}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px}
+  .tile{position:relative;border:3px solid var(--line-2);background:var(--panel)}
+  .rivet{position:absolute;width:5px;height:5px;border-radius:50%;background:var(--line-2);box-shadow:inset 0 0 0 1px var(--bg)}
+  .rivet.a{top:6px;left:6px}.rivet.b{top:6px;right:6px}.rivet.c{bottom:6px;left:6px}.rivet.d{bottom:6px;right:6px}
+  .thead{display:flex;align-items:center;gap:9px;padding:9px 14px;border-bottom:1px solid var(--line);
+    font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--mute)}
+  .thead .tk{width:12px;height:12px;background:var(--yellow)}
+  .thead .route{margin-left:auto;color:var(--dim);text-transform:none;letter-spacing:0}
+  .tbody{display:grid;grid-template-columns:auto 1fr;gap:18px;padding:18px 16px}
+  .swatches{display:flex;flex-direction:column;gap:12px;align-items:center}
+  .big{width:64px;height:64px;color:var(--ink)}
+  .states{display:flex;gap:10px}
+  .chip{width:40px;height:40px;display:grid;place-items:center;border:1px solid var(--line-2);background:var(--panel-2);color:var(--mute)}
+  .chip .ico{width:24px;height:24px}
+  .chip.on{background:var(--yellow);border-color:var(--yellow-dim);color:var(--black)}
+  .meta{min-width:0;display:flex;flex-direction:column;gap:9px}
+  .meta .nm{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:18px;letter-spacing:-.01em}
+  .meta .desc{font-size:11.5px;color:var(--mute);line-height:1.5}
+  pre{margin:0;background:var(--bg);border:1px solid var(--line);padding:9px 11px;overflow:auto;
+    font-size:10.5px;line-height:1.5;color:var(--ink);max-height:150px}
+  pre .t{color:var(--mute)} pre .y{color:var(--yellow)}
+  .copy{align-self:flex-start;font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+    background:none;border:1px solid var(--line-2);color:var(--ink);padding:5px 10px;cursor:pointer}
+  .copy:hover{border-color:var(--yellow);color:var(--yellow)}
+  .copy.done{border-color:var(--yellow);color:var(--yellow)}
+
+  .note{margin-top:26px;border-left:3px solid var(--yellow);padding:10px 14px;background:var(--panel);color:var(--mute);font-size:11px;max-width:680px}
+  .note b{color:var(--ink)}
+
+  /* shared icon paint rules */
+  .ico .accs{stroke:var(--yellow)}
+  .navitem.active .acc,.chip.on .acc{fill:var(--black)!important}
+  .navitem.active .accs,.chip.on .accs{stroke:var(--black)!important}
+
+  @media (max-width:720px){.wrap{grid-template-columns:1fr}.rail{flex-direction:row;border-right:none;border-bottom:3px solid var(--line-2);overflow-x:auto}.rail .logo{margin:0 10px 0 0}.tbody{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- LIVE NAV RAIL -->
+  <nav class="rail" id="rail" aria-label="Primary">
+    <div class="logo display">M</div>
+  </nav>
+
+  <!-- SPEC BOARD -->
+  <main class="board">
+    <div class="head">
+      <h1 class="display">NAV <b>ICONS</b></h1>
+      <span class="v">THEME · REV·2</span>
+    </div>
+    <p class="sub">Four navigation glyphs in the MONOLITH hazard-panel language — 24-grid, 2px hard strokes, square caps, single yellow accent. Click a rail item to preview the active (dark-on-yellow) state.</p>
+    <div class="grid" id="grid"></div>
+
+    <div class="note">
+      <b>Usage.</b> Each SVG paints from <b>currentColor</b> for structure, so set the icon colour via CSS <b>color</b>. The yellow accent is fixed at <b>#ffd400</b> (class <b>.acc</b> / <b>.accs</b>) — override those to <b>currentColor</b> inside an active/selected tile to get the dark-on-yellow look shown in the chips.
+    </div>
+  </main>
+</div>
+
+<script>
+/* ---- icon inner geometry (shared by live svg + code block) ---- */
+const ICONS = {
+  home: {
+    name:'HOME / LAUNCH', route:'/  · launch deck',
+    desc:'Bunker house with a yellow doorway set on a heavy launch-pad ground line. The landing / start screen.',
+    svg:[
+      '<path d="M3 11L12 4L21 11"/>',
+      '<path d="M5 11V20H19V11"/>',
+      '<path d="M3 20H21"/>',
+      '<rect class="acc" x="10" y="13" width="4" height="7" fill="#ffd400" stroke="none"/>'
+    ]
+  },
+  radar: {
+    name:'RADAR', route:'/radar · progress dashboard',
+    desc:'Scope ring with crosshair, a yellow sweep wedge and a contact blip. Maps to this progress dashboard.',
+    svg:[
+      '<circle cx="12" cy="12" r="9"/>',
+      '<path class="thin" d="M12 3V21" opacity="0.45"/>',
+      '<path class="thin" d="M3 12H21" opacity="0.45"/>',
+      '<path class="acc" d="M12 12L12 3A9 9 0 0 1 18.36 5.64Z" fill="#ffd400" fill-opacity="0.25" stroke="none"/>',
+      '<path class="accs" d="M12 12L18.36 5.64" stroke="#ffd400"/>',
+      '<rect class="acc" x="14.5" y="7" width="2" height="2" fill="#ffd400" stroke="none"/>'
+    ]
+  },
+  stack: {
+    name:'STACK', route:'/stack · work items',
+    desc:'Three stacked tiles, top work-item flagged yellow. A dry, scannable list of work items.',
+    svg:[
+      '<rect class="acc" x="4" y="5" width="16" height="3.4" fill="#ffd400" stroke="none"/>',
+      '<rect x="4" y="10.3" width="16" height="3.4" fill="currentColor" stroke="none"/>',
+      '<rect x="4" y="15.6" width="16" height="3.4" fill="currentColor" stroke="none"/>'
+    ]
+  },
+  about: {
+    name:'ABOUT', route:'/about · concept',
+    desc:'Hard square frame around an info mark with a yellow dot. Explains the SWC workload concept.',
+    svg:[
+      '<rect x="4" y="4" width="16" height="16"/>',
+      '<rect class="acc" x="11" y="8" width="2" height="2" fill="#ffd400" stroke="none"/>',
+      '<rect x="11" y="11.5" width="2" height="5.5" fill="currentColor" stroke="none"/>'
+    ]
+  }
+};
+const SVG_OPEN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter">';
+function iconMarkup(key,cls){
+  return `<svg class="ico ${cls||''}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true">${ICONS[key].svg.join('')}</svg>`;
+}
+function codeFor(key){
+  const raw = SVG_OPEN + '\n  ' + ICONS[key].svg.join('\n  ') + '\n</svg>';
+  return raw.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+            .replace(/#ffd400/g,'<span class="y">#ffd400</span>');
+}
+
+/* ---- build nav rail ---- */
+const order = ['home','radar','stack','about'];
+const rail = document.getElementById('rail');
+order.forEach((k,i)=>{
+  const b=document.createElement('button');
+  b.className='navitem'+(k==='radar'?' active':'');
+  b.type='button';
+  b.innerHTML = iconMarkup(k) + `<span class="lab">${k==='home'?'HOME':k.toUpperCase()}</span>`;
+  b.addEventListener('click',()=>{document.querySelectorAll('.navitem').forEach(n=>n.classList.remove('active'));b.classList.add('active');});
+  rail.appendChild(b);
+});
+
+/* ---- build spec tiles ---- */
+const grid = document.getElementById('grid');
+order.forEach((k,i)=>{
+  const ic=ICONS[k];
+  const tile=document.createElement('div');tile.className='tile';
+  tile.innerHTML=`
+    <span class="rivet a"></span><span class="rivet b"></span><span class="rivet c"></span><span class="rivet d"></span>
+    <div class="thead"><span class="tk"></span><span>${String(i+1).padStart(2,'0')} · ${k}</span><span class="route">${ic.route}</span></div>
+    <div class="tbody">
+      <div class="swatches">
+        ${iconMarkup(k,'big').replace('class="ico big"','class="ico big" style="width:64px;height:64px"')}
+        <div class="states">
+          <div class="chip">${iconMarkup(k)}</div>
+          <div class="chip on">${iconMarkup(k)}</div>
+        </div>
+      </div>
+      <div class="meta">
+        <div class="nm display">${ic.name}</div>
+        <div class="desc">${ic.desc}</div>
+        <pre><code>${codeFor(k)}</code></pre>
+        <button class="copy" data-k="${k}">Copy SVG</button>
+      </div>
+    </div>`;
+  grid.appendChild(tile);
+});
+
+/* fix big swatch sizing (class set above) */
+document.querySelectorAll('.swatches .big').forEach(s=>{s.style.width='64px';s.style.height='64px';s.style.color='var(--ink)';});
+
+/* ---- copy buttons ---- */
+grid.addEventListener('click',e=>{
+  const btn=e.target.closest('.copy'); if(!btn)return;
+  const k=btn.dataset.k;
+  const raw = SVG_OPEN + '\n  ' + ICONS[k].svg.join('\n  ') + '\n</svg>';
+  navigator.clipboard?.writeText(raw).then(()=>{
+    btn.textContent='Copied ✓';btn.classList.add('done');
+    setTimeout(()=>{btn.textContent='Copy SVG';btn.classList.remove('done');},1400);
+  });
+});
+</script>
+</body>
+</html>
