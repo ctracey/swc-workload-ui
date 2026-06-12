@@ -84,6 +84,7 @@ body::before {
 }
 
 .wordmark {
+  margin-left: 30px;
   font-family: 'Bricolage Grotesque', sans-serif;
   font-weight: 800;
   font-size: 23px;
