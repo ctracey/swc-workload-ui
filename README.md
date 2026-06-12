@@ -1,6 +1,6 @@
 # SWC Workload UI
 
-A React app distributed as a single self-contained HTML file. The build inlines all JS and CSS into `dist/index.html`, which runs directly in a browser from the filesystem — no server required.
+A React app built into a single self-contained HTML file (`dist/index.html`, all JS and CSS inlined) and run through a small local HTTP server. The server exposes the app at `/` and the local filesystem read-only, so a workload anywhere on disk can be opened — and bookmarked — by absolute path.
 
 ## Prerequisites
 
@@ -21,6 +21,31 @@ Then install dependencies:
 npm install
 ```
 
+## Running
+
+Build, then start the local server:
+
+```sh
+npm run build
+npm run serve
+```
+
+Open a workload by pointing `path` at the folder containing its `workload.json`:
+
+```
+http://localhost:8123/?path=/Users/me/projects/quote-app/.swc/web
+```
+
+That URL is a complete, bookmarkable session — one bookmark per workload. The port can be changed with `PORT=9000 npm run serve`.
+
+The server (`scripts/serve.mjs`, no dependencies) binds to 127.0.0.1 only and serves files read-only. The built `dist/index.html` also works behind any other static server; `path` is then resolved against that server's document root.
+
+## Loading a workload
+
+- **`?path=` parameter** — loads `<path>/workload.json`, polled every 2 seconds so edits to the file appear live.
+- **No parameter** — the app shows a Select Workload panel (PATH readout shows `none`): enter the absolute folder path and OPEN navigates to the `?path=` URL, making the session bookmarkable.
+- Clicking the SWC WORKLOAD title starts fresh: reloads without the `path` parameter.
+
 ## Development
 
 Start the dev server with hot reload:
@@ -31,47 +56,15 @@ npm run dev
 
 Then open the URL it prints (default http://localhost:5173).
 
-## Build
-
-Build the single-file distributable:
-
-```sh
-npm run build
-```
-
-The output is `dist/index.html` with all JS and CSS inlined (via [vite-plugin-singlefile](https://github.com/richardtallent/vite-plugin-singlefile)). Open it directly in a browser:
-
-```sh
-open dist/index.html
-```
-
-To preview the production build through a local server instead:
-
-```sh
-npm run preview
-```
-
-## Loading a workload
-
-The app loads `workload.json` from the folder given in the `path` query parameter (relative to the HTML file, or absolute):
-
-```
-index.html?path=../runs/quote-app
-```
-
-Without the parameter it falls back to the bundled sample data (PATH readout shows `sample`).
-
-Note: when the HTML file is opened via `file://`, most browsers block fetching local files, so the `path` parameter generally requires serving the file over HTTP (e.g. `npm run preview` or any static server).
-
 ## Project structure
 
 ```
 index.html              Entry page (mount point)
 src/
   main.jsx              React bootstrap
-  App.jsx               App shell
-  components/
-    Title.jsx           Title component
-  index.css             Global styles
+  App.jsx               App shell, workload loading/polling
+  workload.js           Status/stage derivation helpers
+  components/           Title bar, sidebar, cards, panels, charts
+scripts/serve.mjs       Local HTTP server (app + read-only filesystem)
 vite.config.js          Vite + React + singlefile plugin config
 ```

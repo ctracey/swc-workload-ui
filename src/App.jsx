@@ -3,30 +3,58 @@ import TitleBar from './components/TitleBar.jsx'
 import Sidebar from './components/Sidebar.jsx'
 import WorkflowPanel from './components/WorkflowPanel.jsx'
 import WorkloadProgressPanel from './components/WorkloadProgressPanel.jsx'
+import SelectWorkloadPanel from './components/SelectWorkloadPanel.jsx'
 import { statusCounts, deliverStages, flattenItems } from './workload.js'
-import sample from '../ref/workload.json'
 
-// folder containing workload.json, e.g. index.html?path=../runs/quote-app
+// folder containing workload.json, e.g. /?path=/Users/me/runs/quote-app
 const pathParam = new URLSearchParams(window.location.search).get('path')
 
 function workloadUrl(path) {
-  return (path.endsWith('/') ? path : path + '/') + 'workload.json'
+  // the vite dev server only exposes the filesystem under its /@fs/ prefix
+  const base = import.meta.env.DEV && path.startsWith('/') ? '/@fs' + path : path
+  return (base.endsWith('/') ? base : base + '/') + 'workload.json'
 }
 
+const POLL_MS = 2000
+
 export default function App() {
-  const [workload, setWorkload] = useState(pathParam ? null : sample)
+  const [workload, setWorkload] = useState(null)
   const [error, setError] = useState(null)
   const [selectedId, setSelectedId] = useState(null)
 
   useEffect(() => {
     if (!pathParam) return
-    fetch(workloadUrl(pathParam))
-      .then((res) => {
+    let cancelled = false
+    let lastText = null
+
+    const tick = async (first) => {
+      try {
+        const res = await fetch(workloadUrl(pathParam))
         if (!res.ok) throw new Error(`HTTP ${res.status}`)
-        return res.json()
-      })
-      .then(setWorkload)
-      .catch((err) => setError(`failed to load ${workloadUrl(pathParam)} — ${err.message}`))
+        const text = await res.text()
+        if (cancelled || text === lastText) return
+        if (text.trimStart().startsWith('<')) {
+          throw new Error('server returned HTML, not JSON — run the app via `npm run serve`')
+        }
+        const data = JSON.parse(text)
+        lastText = text
+        setWorkload(data)
+        setError(null)
+      } catch (err) {
+        // polling hits transient states while the file is being saved;
+        // only surface errors when nothing has loaded yet
+        if (!cancelled && first) {
+          setError(`failed to load ${workloadUrl(pathParam)} — ${err.message}`)
+        }
+      }
+    }
+
+    tick(true)
+    const id = setInterval(() => tick(false), POLL_MS)
+    return () => {
+      cancelled = true
+      clearInterval(id)
+    }
   }, [])
 
   const items = workload?.items ?? []
@@ -34,17 +62,26 @@ export default function App() {
 
   return (
     <div className="app">
-      <TitleBar path={pathParam ?? 'sample'} queueCount={workload ? flattenItems(items).length : undefined} />
+      <TitleBar
+        path={pathParam ?? 'none'}
+        queueCount={workload ? flattenItems(items).length : undefined}
+      />
       {error ? (
         <div className="appmsg">{error}</div>
-      ) : !workload ? (
+      ) : pathParam && !workload ? (
         <div className="appmsg">loading workload…</div>
       ) : (
         <div className="body">
           <Sidebar items={items} selectedId={selectedId} onSelect={setSelectedId} />
           <div className="main">
-            {selected && <WorkflowPanel stages={deliverStages(selected)} tag={`deliver · ${selected.id}`} />}
-            <WorkloadProgressPanel counts={statusCounts(items)} />
+            {workload ? (
+              <>
+                {selected && <WorkflowPanel stages={deliverStages(selected)} tag={`deliver · ${selected.id}`} />}
+                <WorkloadProgressPanel counts={statusCounts(items)} />
+              </>
+            ) : (
+              <SelectWorkloadPanel />
+            )}
           </div>
         </div>
       )}

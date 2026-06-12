@@ -5,7 +5,9 @@ export default function TitleBar({ path, queueCount }) {
   return (
     <header className="rail">
       <div className="brand">
-        <Title text="SWC" highlight="WORKLOAD" />
+        <a className="homelink" href={window.location.pathname} title="Start fresh">
+          <Title text="SWC" highlight="WORKLOAD" />
+        </a>
       </div>
       <Readouts path={path} queueCount={queueCount} />
     </header>
