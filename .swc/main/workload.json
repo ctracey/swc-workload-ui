@@ -55,6 +55,76 @@
       "status": "not-started",
       "children": [],
       "meta": {}
+    },
+    {
+      "id": "5ad46de",
+      "title": "enhanced card status indicator (left bar)",
+      "status": "not-started",
+      "children": [],
+      "meta": {}
+    },
+    {
+      "id": "cdabb86",
+      "title": "overall workload progress should be sidebar (right). Move progress pie chart to sidebar",
+      "status": "not-started",
+      "children": [],
+      "meta": {}
+    },
+    {
+      "id": "d2d68ba",
+      "title": "sidebars should be collapsable",
+      "status": "not-started",
+      "children": [],
+      "meta": {}
+    },
+    {
+      "id": "ea59e18",
+      "title": "add keyboard shortcut support",
+      "status": "not-started",
+      "children": [],
+      "meta": {}
+    },
+    {
+      "id": "580e3f3",
+      "title": "expaneded list view",
+      "status": "not-started",
+      "children": [],
+      "meta": {}
+    },
+    {
+      "id": "944e503",
+      "title": "display title of selected workitem incl number,id",
+      "status": "not-started",
+      "children": [],
+      "meta": {}
+    },
+    {
+      "id": "b14c307",
+      "title": "improve refresh frequency so change recognised immeadiately",
+      "status": "not-started",
+      "children": [],
+      "meta": {}
+    },
+    {
+      "id": "3c896e6",
+      "title": "ability to update and edit and reorder",
+      "status": "not-started",
+      "children": [],
+      "meta": {}
+    },
+    {
+      "id": "c97d048",
+      "title": "ability to store and switch between multiple bookmarked projects",
+      "status": "not-started",
+      "children": [],
+      "meta": {}
+    },
+    {
+      "id": "4b9e96b",
+      "title": "ability to reference git repo and branch where applicable, or show where not a repo",
+      "status": "not-started",
+      "children": [],
+      "meta": {}
     }
   ]
 }

@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import Panel from './Panel.jsx'
 
-export default function SelectWorkloadPanel() {
-  const [path, setPath] = useState('')
+export default function SelectWorkloadPanel({ initialPath = '' }) {
+  const [path, setPath] = useState(initialPath)
 
   // navigating with ?path= puts the session in the URL, so it is bookmarkable
   const openPath = (e) => {

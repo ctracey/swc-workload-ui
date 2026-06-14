@@ -1,9 +1,13 @@
 import { useEffect, useState } from 'react'
 import TitleBar from './components/TitleBar.jsx'
+import NavRail from './components/NavRail.jsx'
 import Sidebar from './components/Sidebar.jsx'
 import WorkflowPanel from './components/WorkflowPanel.jsx'
 import WorkloadProgressPanel from './components/WorkloadProgressPanel.jsx'
 import SelectWorkloadPanel from './components/SelectWorkloadPanel.jsx'
+import HomeView from './components/HomeView.jsx'
+import StackView from './components/StackView.jsx'
+import AboutView from './components/AboutView.jsx'
 import { statusCounts, deliverStages, flattenItems } from './workload.js'
 
 // folder containing workload.json, e.g. /?path=/Users/me/runs/quote-app
@@ -21,6 +25,7 @@ export default function App() {
   const [workload, setWorkload] = useState(null)
   const [error, setError] = useState(null)
   const [selectedId, setSelectedId] = useState(null)
+  const [view, setView] = useState('radar')
 
   useEffect(() => {
     if (!pathParam) return
@@ -65,26 +70,40 @@ export default function App() {
       <TitleBar
         path={pathParam ?? 'none'}
         queueCount={workload ? flattenItems(items).length : undefined}
+        onHome={() => setView('home')}
       />
-      {error ? (
-        <div className="appmsg">{error}</div>
-      ) : pathParam && !workload ? (
-        <div className="appmsg">loading workload…</div>
-      ) : (
-        <div className="body">
-          <Sidebar items={items} selectedId={selectedId} onSelect={setSelectedId} />
-          <div className="main">
-            {workload ? (
-              <>
-                {selected && <WorkflowPanel stages={deliverStages(selected)} tag={`deliver · ${selected.id}`} />}
-                <WorkloadProgressPanel counts={statusCounts(items)} />
-              </>
+      <div className="app-body">
+        <NavRail view={view} onView={setView} />
+        <div className="view-content">
+          {view === 'radar' ? (
+            error ? (
+              <div className="appmsg">{error}</div>
+            ) : pathParam && !workload ? (
+              <div className="appmsg">loading workload…</div>
             ) : (
-              <SelectWorkloadPanel />
-            )}
-          </div>
+              <div className="body">
+                <Sidebar items={items} selectedId={selectedId} onSelect={setSelectedId} />
+                <div className="main">
+                  {workload ? (
+                    <>
+                      {selected && <WorkflowPanel stages={deliverStages(selected)} tag={`deliver · ${selected.id}`} />}
+                      <WorkloadProgressPanel counts={statusCounts(items)} />
+                    </>
+                  ) : (
+                    <SelectWorkloadPanel />
+                  )}
+                </div>
+              </div>
+            )
+          ) : view === 'home' ? (
+            <HomeView path={pathParam} />
+          ) : view === 'stack' ? (
+            <StackView items={items} />
+          ) : view === 'about' ? (
+            <AboutView />
+          ) : null}
         </div>
-      )}
+      </div>
     </div>
   )
 }
