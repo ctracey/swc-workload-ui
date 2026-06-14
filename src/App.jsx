@@ -98,7 +98,7 @@ export default function App() {
           ) : view === 'home' ? (
             <HomeView path={pathParam} />
           ) : view === 'stack' ? (
-            <StackView />
+            <StackView items={items} />
           ) : view === 'about' ? (
             <AboutView />
           ) : null}
