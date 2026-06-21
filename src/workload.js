@@ -59,7 +59,7 @@ export function itemStage(item) {
 
 // swc workflow stage sequences
 export const WORKFLOWS = {
-  deliver: ['requirements', 'specs', 'solution-design', 'implement', 'refine', 'review'],
+  deliver: ['requirements', 'specs', 'solution-design', 'implement', 'refine', 'review', 'accept'],
   implement: ['orient', 'implement', 'summarise'],
 }
 

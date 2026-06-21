@@ -175,8 +175,8 @@ function StackRow({ row, isCollapsed, onToggle }) {
       </div>
 
       <div className="c-bar">
-        <span className="pbar"><i className={barCls} style={{ width: state === 'skipped' ? 0 : `${pct}%` }} /></span>
-        <span className="ppct">{state === 'skipped' ? '—' : `${pct}%`}</span>
+        <span className="pbar"><i className={barCls} style={{ width: state === 'skipped' ? 0 : state === 'done' ? '100%' : `${pct}%` }} /></span>
+        <span className="ppct">{state === 'skipped' ? '—' : state === 'done' ? '100%' : `${pct}%`}</span>
       </div>
     </div>
   )

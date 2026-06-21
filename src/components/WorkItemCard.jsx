@@ -9,7 +9,9 @@ export default function WorkItemCard({ item, number, selectedId, onSelect }) {
   const pct = itemProgress(item)
   const state = mapStatus(item.status)
   const stage = itemStage(item)
-  const stripStates = progressStages(item).map((s) => (s.state === 'queued' ? 'pending' : s.state))
+  const stripStates = state === 'done'
+    ? progressStages(item).map(() => 'done')
+    : progressStages(item).map((s) => (s.state === 'queued' ? 'pending' : s.state))
   const selected = item.id === selectedId
   const childCount = item.children?.length ?? 0
 
